@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.get('/', function (request, response) {
-    response.send('Hello World!')
+    response.sendFile(__dirname + '/public/' + 'home.html');
 })
 
 app.post('/login', function (request, response) {
