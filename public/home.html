@@ -1,0 +1,138 @@
+<html>
+
+<head>
+    <title>Smart Text</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+    <script type="text/javascript">
+        function MyViewModel() {
+            var Self = this;
+
+            Self.errmsg = ko.observable('');
+            Self.loginname = ko.observable('');
+            Self.password = ko.observable('');
+            Self.showLogin = ko.observable(true);
+
+            Self.logout = function () {
+                document.cookie.split(";").forEach(function (c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+                Self.showLogin(true);
+            }
+
+            Self.loginnow = function () {
+
+
+                var reqData = {
+                    username: Self.loginname(),
+                    passcode: Self.password()
+                }
+                Self.loginname('');
+                Self.password('');
+                Self.errmsg('');
+                $.post("/login", reqData, function (result) {
+                    if (result.isSuccess) {
+                        Self.showLogin(false);
+                    }
+                    else {
+                        Self.errmsg('Invalid login details');
+                    }
+                });
+
+            }
+
+            Self.msgs = ko.observableArray([]);
+            Self.key = ko.observable('');
+            Self.msg = ko.observable('');
+
+            Self.showLoginScreen = function () {
+                Self.showLogin(true);
+                Self.loginname('');
+                Self.password('');
+                Self.errmsg('');
+            }
+
+            getmsgs = function (keyFromOthers) {
+                if (Self.key() || keyFromOthers) {
+                    var key = Self.key() || keyFromOthers;
+                    Self.key('')
+                    $.ajax({
+                        url: "/getmsgs?code=" + key, success: function (result) {
+
+
+                            if (result.sessionExpired) {
+                                Self.showLoginScreen();
+                                Self.errmsg('Session Expired');
+                                return;
+                            }
+                            Self.msgs(result.msgs);
+                            setTimeout(()=>{
+                                Self.msgs.removeAll();
+                            },10000)
+                           // console.log(Self.msgs())
+                            //$("#divContent").html(result.msgs);
+                        }
+                    });
+                }
+            };
+
+            postmsgs = function () {
+                if (Self.key()) {
+                    var key = Self.key();
+                    Self.key('');
+                    var reqData = {
+                        msg: Self.msg(),
+                        code: key
+                    }
+                    $.post("/msgs", reqData, function (result) {
+                        if (result.sessionExpired) {
+                            Self.showLoginScreen();
+                            Self.errmsg('Session Expired');
+                        }
+                        Self.msg('');
+                        getmsgs(key);
+                    });
+                }
+            }
+
+
+
+        };
+        $(document).ready(function () {
+
+            ko.applyBindings(new MyViewModel());
+            //getmsgs();
+        }
+
+        )
+</script>
+<style lang="text/css">
+.alignright{
+    text-align: right;
+}
+    </style>
+</head>
+
+<body style="vertical-align: center">
+    <div data-bind="visible:showLogin()">
+        <p style="color: red" data-bind="html:errmsg"></p>
+        Login name :<input data-bind="value:loginname" /> Password :<input data-bind="value:password" />
+        <button name="send" data-bind="click:loginnow">Login</button>
+    </div>
+    <div data-bind="visible:!showLogin()">
+        <h2>Welcome</h2>
+        <button name="logout" data-bind="click:logout">Logout</button>
+        <div data-bind="foreach: msgs">
+        
+            <div data-bind="css:fromme? 'alignright':''">
+                <h4 data-bind="text: msg"></h4>
+                <p>Time: <span data-bind="text: createdDate"></span></p>
+            </div>
+        </div>
+        Key:<input name="key" data-bind="value:key" /><button name="send" data-bind="click:getmsgs">View</button>
+        <br/> Message:
+        <input name="msg" data-bind="value:msg" /><button name="send" data-bind="click:postmsgs">Send</button>
+
+
+    </div>
+</body>
+
+</html>
