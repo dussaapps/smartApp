@@ -2,7 +2,12 @@
 
 <head>
     <title>Smart Text</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
     <script type="text/javascript">
         function MyViewModel() {
@@ -64,10 +69,10 @@
                                 return;
                             }
                             Self.msgs(result.msgs);
-                            setTimeout(()=>{
+                            setTimeout(() => {
                                 Self.msgs.removeAll();
-                            },10000)
-                           // console.log(Self.msgs())
+                            }, 10000)
+                            // console.log(Self.msgs())
                             //$("#divContent").html(result.msgs);
                         }
                     });
@@ -103,35 +108,62 @@
         }
 
         )
-</script>
-<style lang="text/css">
-.alignright{
-    text-align: right;
-}
+    </script>
+    <style lang="text/css">
+        .alignright {
+            text-align: right;
+        }
+        .bg {
+background-color: grey;
+        }
     </style>
 </head>
 
-<body style="vertical-align: center">
-    <div data-bind="visible:showLogin()">
-        <p style="color: red" data-bind="html:errmsg"></p>
-        Login name :<input data-bind="value:loginname" /> Password :<input data-bind="value:password" />
-        <button name="send" data-bind="click:loginnow">Login</button>
-    </div>
-    <div data-bind="visible:!showLogin()">
-        <h2>Welcome</h2>
-        <button name="logout" data-bind="click:logout">Logout</button>
-        <div data-bind="foreach: msgs">
-        
-            <div data-bind="css:fromme? 'alignright':''">
-                <h4 data-bind="text: msg"></h4>
-                <p>Time: <span data-bind="text: createdDate"></span></p>
+<body style="vertical-align: center" class="bg">
+    <div class="container">
+        <h2>Smart Text</h2>
+        <div data-bind="visible:showLogin()" class="panel panel-default">
+            <div class="panel-body">
+                <p style="color: red" data-bind="html:errmsg"></p>
+
+                <div class="form-group">
+                    <label for="usr">username:</label>
+                    <input class="form-control" placeholder="Enter username" data-bind="value:loginname" id="usr">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" class="form-control" placeholder="Enter password" data-bind="value:password" />
+                </div>
+                <button name="send" class="btn btn-default" data-bind="click:loginnow">Login</button>
             </div>
         </div>
-        Key:<input name="key" data-bind="value:key" /><button name="send" data-bind="click:getmsgs">View</button>
-        <br/> Message:
-        <input name="msg" data-bind="value:msg" /><button name="send" data-bind="click:postmsgs">Send</button>
+        <div data-bind="visible:!showLogin()" class="panel panel-default">
+            <div class="panel-body">
+                <span>
+                <h4>Welcome</h4>
+                <button name="logout" class="btn btn-default" data-bind="click:logout">Logout</button>
+                </span>
+                <div data-bind="foreach: msgs">
 
-
+                    <div data-bind="css:fromme? 'alignright':''">
+                        <h4 data-bind="text: msg"></h4>
+                        <p>Time: <span data-bind="text: createdDate"></span></p>
+                    </div>
+                </div>
+                <div class="panel-body">
+                     <div class="form-group">
+                    <!-- <label>Key:</label> -->
+                    <input class="form-control" placeholder="key" name="key" data-bind="value:key" />                    
+                     </div>
+                <div class="form-group">
+                    <!-- <label>Message:</label>  -->
+                    <input name="msg" class="form-control input-lg" placeholder="message" data-bind="value:msg" />                    
+                </div>
+                <button class="btn btn-default" name="send" data-bind="click:getmsgs">View</button>
+                    <button class="btn btn-default" name="send" data-bind="click:postmsgs">Send</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 
