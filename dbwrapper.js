@@ -35,9 +35,7 @@ dbwrapper.pushmsg = function (msgToPush, cb) {
         }
         else {
             //console.log("chat message inserted into db: " + msg);
-            cb(undefined, {
-                saved: true
-            });
+            cb(undefined, {errmsg:"",issuccess:true});
         }
     });
 
@@ -47,11 +45,15 @@ dbwrapper.pushmsg = function (msgToPush, cb) {
 
 dbwrapper.getmsg = function (userInfo,cb) {
 
-    var collection = db.collection('chat messages')
-    var stream = collection.find().sort({ _id: -1 }).limit(10).stream();
+    var collection = db.collection(msgCollectionName);
+    var stream = collection.find().limit(10).stream();
+    //.sort({ _id: -1 })
+    stream.on('error', function (err) {
+        cb({errmsg:err,issuccess:false},undefined);
+})
     stream.on('data', function (chat) {
         //socket.emit('chat', chat.content);
-        return chat.content;
+        cb(undefined, {errmsg:"",issuccess:true});
     });
 
 }

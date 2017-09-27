@@ -96,7 +96,8 @@ app.get('/getmsgs', function (request, response) {
         if(data && data.length==0){
             data.push({
                 msg:'No Messages',
-                time:dateFormat(new Date(), "yyyy-mm-dd h:MM:ss")
+                fromme:false,
+                time:dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss")
             });
         }
         var dataToSend={

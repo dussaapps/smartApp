@@ -32,7 +32,7 @@ controller.loginUser = (params, cb) => {
             fileSaveRequired = true;
             if (user.passcode == params.passcode) {
                 user.loginAttempts = 0;
-                user.lastLogin = dateFormat(new Date(), "yyyy-mm-dd h:MM:ss");
+                user.lastLogin = dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss");
                 userInfo = user;
             }
             else {
@@ -77,7 +77,7 @@ controller.pushMessages = (msg, cb) => {
         from: msg.from,
         to: msg.to,
         msg: encryptedMsg,
-        createdDate: dateFormat(new Date(), "yyyy-mm-dd h:MM:ss"),
+        createdDate: dateFormat(new Date(), "yyyy-mm-dd hh:MM:ss"),
         fromActiveStatus: 1,
         toActiveStatus: 1,
         read: 0
