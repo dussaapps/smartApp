@@ -27,7 +27,7 @@ dbwrapper.connectToDb = function (callbck) {
 
 dbwrapper.pushmsg = function (msgToPush, cb) {
 
-    var collection = db.collection(msgCollectionName);
+    var collection = dbwrapper.db.collection(msgCollectionName);
     collection.insert(msgToPush, function (err, o) {
         if (err) {
             console.warn(err.message);
@@ -45,7 +45,7 @@ dbwrapper.pushmsg = function (msgToPush, cb) {
 
 dbwrapper.getmsg = function (userInfo,cb) {
 
-    var collection = db.collection(msgCollectionName);
+    var collection = dbwrapper.db.collection(msgCollectionName);
     var stream = collection.find().limit(10).stream();
     //.sort({ _id: -1 })
     stream.on('error', function (err) {
