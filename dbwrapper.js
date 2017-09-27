@@ -53,7 +53,8 @@ dbwrapper.getmsg = function (userInfo,cb) {
 })
     stream.on('data', function (chat) {
         //socket.emit('chat', chat.content);
-        cb(undefined, {errmsg:"",issuccess:true});
+        console.log(chat);
+        cb(undefined, chat);
     });
 
 }
