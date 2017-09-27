@@ -46,7 +46,7 @@ dbwrapper.pushmsg = function (msgToPush, cb) {
 dbwrapper.getmsg = function (userInfo, cb) {
 
     var collection = dbwrapper.db.collection(msgCollectionName);
-    var stream = collection.find().sort({ _id: -1 }).limit(10).toArray((err, msgs) => {
+    var stream = collection.find().sort({ _id: -1 }).limit(10).sort({ _id: 1 }).toArray((err, msgs) => {
         if (err) {
             cb({ errmsg: err, issuccess: false }, undefined);
         }
