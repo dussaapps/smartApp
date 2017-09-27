@@ -35,7 +35,7 @@ dbwrapper.pushmsg = function (msgToPush, cb) {
         }
         else {
             //console.log("chat message inserted into db: " + msg);
-            cb(undefined, {errmsg:"",issuccess:true});
+            cb(undefined, { errmsg: "", issuccess: true });
         }
     });
 
@@ -43,19 +43,18 @@ dbwrapper.pushmsg = function (msgToPush, cb) {
 
 }
 
-dbwrapper.getmsg = function (userInfo,cb) {
+dbwrapper.getmsg = function (userInfo, cb) {
 
     var collection = dbwrapper.db.collection(msgCollectionName);
-    var stream = collection.find().limit(10).stream();
-    //.sort({ _id: -1 })
-    stream.on('error', function (err) {
-        cb({errmsg:err,issuccess:false},undefined);
-})
-    stream.on('data', function (chat) {
-        //socket.emit('chat', chat.content);
-        console.log(chat);
-        cb(undefined, chat);
+    var stream = collection.find().sort({ _id: -1 }).limit(10).toArray((err, msgs) => {
+        if (err) {
+            cb({ errmsg: err, issuccess: false }, undefined);
+        }
+        else {
+            cb(undefined, msgs);
+        }
     });
+
 
 }
 
