@@ -32,7 +32,7 @@ controller.loginUser = (params, cb) => {
             fileSaveRequired = true;
             if (user.passcode == params.passcode) {
                 user.loginAttempts = 0;
-                user.lastLogin = dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
+                user.lastLogin = config.utils.getCurrentUtcTimeString(); //dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss");
                 userInfo = user;
             }
             else {
@@ -77,7 +77,7 @@ controller.pushMessages = (msg, cb) => {
         from: msg.from,
         to: msg.to,
         msg: encryptedMsg,
-        createdDate: dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss"),
+        createdDate:config.utils.getCurrentUtcTimeString(), // dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss"),
         fromActiveStatus: 1,
         toActiveStatus: 1,
         read: 0
@@ -104,6 +104,7 @@ controller.getMessages = (reqParams, cb) => {
                 //console.log('decrypting ',msg.msg, reqParams.code);
                 msg.msg = customEncryption.decrypt(msg.msg, reqParams.code, msg.from, msg.to,reqParams.username);                
                 msg.fromme= msg.from==reqParams.username?true:false;
+              
             }
             cb(undefined, msgs);
         }

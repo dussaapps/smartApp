@@ -97,7 +97,7 @@ app.get('/getmsgs', function (request, response) {
             data.push({
                 msg:'No Messages',
                 fromme:false,
-                time:dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")
+                time:config.utils.getCurrentUtcTimeString()// dateFormat(new Date(), "yyyy-mm-dd HH:MM:ss")
             });
         }
         var dataToSend={
