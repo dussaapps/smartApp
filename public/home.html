@@ -87,7 +87,7 @@
         .chat-app-winodow {
             height: 100%;
             width: 100%;
-            background: #a9bcff;
+            background: #a9bcff;            
         }
 
 
@@ -142,6 +142,12 @@
             box-shadow: 0px 0px 8px rgba(17, 17, 17, 0.45);
             max-height: 300px;
             overflow-y: scroll;
+            
+        }
+
+        .birthdaycss{
+            background-image: url('./tenor.gif');
+            background-size: 60px 80px
         }
 
         .chat-window-msgs h3 {
@@ -188,7 +194,7 @@
                 </div>
 
 
-                <div data-bind="foreach: msgs" class="chat-window-msgs">
+                <div data-bind="foreach: msgs" id="chat-window-msgs" class="chat-window-msgs">
                     <!-- <h3>Messages</h3> -->
                     <div data-bind="css:fromme? 'align-right':'align-left'">
                         <h4 data-bind="text: msg"></h4>
@@ -331,6 +337,8 @@
 
         ko.applyBindings(new MyViewModel());
         //getmsgs();
+        if(moment().format('DD-MM-YY')=="07-10-17")
+            $("#chat-window-msgs").addClass("birthdaycss");
     }
 
     )
